@@ -2,3 +2,6 @@ Changes to WWW::LongURL
 
 0.01  2011-08-22
     * Initial version.
+
+0.02  2011-08-23
+    * Removed unnecessary test dependency on Test::Exception.
