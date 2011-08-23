@@ -14,7 +14,6 @@ BEGIN {
 }
 
 use Test::More;
-use Test::Exception;
 
 use_ok('WWW::LongURL') or die;
 done_testing();
