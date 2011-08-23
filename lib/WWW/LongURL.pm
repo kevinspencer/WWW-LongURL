@@ -6,9 +6,9 @@ use strict;
 use warnings;
 use base qw(Class::Accessor::Fast);
 
-__PACKAGE__->mk_accessors(qw(apibase useragent format shorturl longurl));
+__PACKAGE__->mk_accessors(qw(apibase useragent format error));
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub new {
     my $class = shift;
@@ -17,7 +17,7 @@ sub new {
     bless $self, $class;
     $self->apibase('http://api.longurl.org/v2/');
     $self->format('json');
-    $self->useragent('WWW-LongURL/0.01');
+    $self->useragent('WWW-LongURL/0.03');
     return $self;
 }
 
@@ -32,9 +32,15 @@ sub expand {
     my $response = $ua->get($api);
     if ($response->is_success()) {
         my $obj = JSON::Any->jsonToObj($response->decoded_content());
-        return $obj->{'long-url'};
+        if ($obj->{'long-url'}) {
+            return $obj->{'long-url'};
+        } else {
+            $self->error("Unrecognized response from " . $self->apibase());
+            return;
+        }
     } else {
-        print $response->status_line(), "\n";
+        $self->error($response->status_line());
+        return;
     }
 }
 
@@ -53,6 +59,9 @@ WWW::LongURL - Perl interface to the LongURL API.
   my $longurl = WWW::LongURL->new();
 
   my $expanded_url = $longurl->expand('http://bit.ly/cZcYFn');
+  if (! $expanded_url) {
+     die $longurl->error(), "\n";
+  }
 
 =head1 DESCRIPTION
 
@@ -73,6 +82,10 @@ Constructor
 =item C<expand($url)>
 
 On success, will return the expanded URL from LongURL.  On failure, returns undef.
+
+=item C<error>
+
+Returns the last error message.
 
 =back
 
