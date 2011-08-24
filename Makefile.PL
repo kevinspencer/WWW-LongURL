@@ -13,6 +13,7 @@ test_requires 'LWP::Online';
 requires 'Class::Accessor::Fast';
 requires 'LWP::UserAgent';
 requires 'JSON::Any';
+requires 'URI::Escape';
 
 auto_install;
 
