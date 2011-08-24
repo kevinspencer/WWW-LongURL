@@ -23,8 +23,9 @@ requires:
   Class::Accessor::Fast: 0
   JSON::Any: 0
   LWP::UserAgent: 0
+  URI::Escape: 0
   perl: 5.8.8
 resources:
   license: http://dev.perl.org/licenses/
-  repository: git@github.com:kevinspencer/WWW-LongURL.git
-version: 0.03
+  repository: git://github.com/kevinspencer/WWW-LongURL.git
+version: 0.04
