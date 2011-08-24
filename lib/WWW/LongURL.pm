@@ -2,13 +2,14 @@ package WWW::LongURL;
 
 use JSON::Any;
 use LWP::UserAgent;
+use URI::Escape;
 use strict;
 use warnings;
 use base qw(Class::Accessor::Fast);
 
 __PACKAGE__->mk_accessors(qw(apibase useragent format error));
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub new {
     my $class = shift;
@@ -17,17 +18,22 @@ sub new {
     bless $self, $class;
     $self->apibase('http://api.longurl.org/v2/');
     $self->format('json');
-    $self->useragent('WWW-LongURL/0.03');
+    $self->useragent('WWW-LongURL/0.04');
     return $self;
 }
 
 sub expand {
     my ($self, $url) = @_;
 
+    if (! $url) {
+        $self->error("No URL found to expand");
+        return;
+    }
+
     my $ua = LWP::UserAgent->new();
     $ua->agent($self->useragent());
 
-    my $api = $self->apibase() . 'expand?url=' . $url . '&format=' . $self->format();
+    my $api = $self->apibase() . 'expand?url=' . uri_escape($url) . '&format=' . $self->format();
     
     my $response = $ua->get($api);
     if ($response->is_success()) {
