@@ -4,9 +4,8 @@ use WWW::LongURL;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 my $shorturl = shift;
+$shorturl ||= 'http://is.gd/w';
 
 my $expander  = WWW::LongURL->new();
 my $longerurl = $expander->expand($shorturl);
