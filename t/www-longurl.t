@@ -20,4 +20,6 @@ ok(my $expander = WWW::LongURL->new());
 isa_ok($expander, 'WWW::LongURL');
 my $short_url = 'http://is.gd/w';
 is ($expander->expand($short_url), 'http://www.google.com/');
+my @services = $expander->get_services();
+ok (@services);
 done_testing();
